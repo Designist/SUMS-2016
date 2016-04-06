@@ -1,0 +1,704 @@
+\documentclass{beamer}
+ 
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{etoolbox}
+\usepackage{multicol}
+\usepackage{graphicx}
+\usepackage{tikz}
+
+\makeatletter
+\AtBeginEnvironment{proof}{\let\@addpunct\@gobble}
+\makeatother
+
+\newtheorem{conj}{Conjecture}
+\newtheorem{cor}[theorem]{Corollary}
+\newtheorem{defn}{Definition}
+\newtheorem{observe}{Observation}
+\renewcommand{\thefootnote}{\arabic{footnote}}
+
+\usetheme{Madrid}
+\usecolortheme{beaver}
+%---------------------------------------------------------------------------------
+\title{Rotor routing on 2-manifolds}
+\author{Taro~Shima \and Nicholas~Tomlin}
+\institute{Brown University}
+\date{SUMS, March 2016}
+%---------------------------------------------------------------------------------
+\setbeamertemplate{footline} {
+	\leavevmode%
+	\hbox{%
+		\begin{beamercolorbox}[wd=.33\paperwidth,ht=2.25ex,dp=1ex,center]   {author in head/foot}%
+			\usebeamerfont{author in head/foot}\insertshortauthor
+		\end{beamercolorbox}%
+		\begin{beamercolorbox}[wd=.34\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+			\usebeamerfont{title in head/foot}\insertshorttitle
+		\end{beamercolorbox}%
+		\begin{beamercolorbox}[wd=.33\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+			\insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+		\end{beamercolorbox}}%
+	\vskip0pt%
+}
+%---------------------------------------------------------------------------------
+
+\begin{document}
+
+%---------------------------------------------------------------------------------
+%------------------------------TITLE SLIDE---------------------------------
+%---------------------------------------------------------------------------------
+
+\frame{\titlepage}
+
+%---------------------------------------------------------------------------------
+%-----------------------------BLANK INTRO--------------------------------
+%---------------------------------------------------------------------------------
+
+%\begin{frame}
+%	\frametitle{Outline}
+	
+%\end{frame}
+
+%---------------------------------------------------------------------------------
+%-------------------------------OVERVIEW----------------------------------
+%---------------------------------------------------------------------------------
+
+\begin{frame}
+	\frametitle{Outline}
+	\pause
+	\begin{itemize}
+		\item Definition of rotor routing\pause
+		\item Rotor routing on $\mathbb{Z}^2$\pause
+		\item Recurrence and transience\pause
+		\item Rotor routing on other 2-manifolds\pause
+		\item Visualizations and experimental results
+	\end{itemize}
+	
+\end{frame}
+
+%---------------------------------------------------------------------------------
+%-----------------------------BLANK INTRO--------------------------------
+%---------------------------------------------------------------------------------
+
+%\begin{frame}
+%	\frametitle{What is rotor routing?}
+	
+%\end{frame}
+
+%---------------------------------------------------------------------------------
+%-----------------------------MORAL INTRO-------------------------------
+%---------------------------------------------------------------------------------
+
+\begin{frame}
+	\frametitle{What is rotor routing?}
+	
+	\pause
+	
+	Rotor routing is a deterministic version of the \underline{random walk}.
+
+\end{frame}
+
+%---------------------------------------------------------------------------------
+%--------------------------ROTOR DEFINITION---------------------------
+%---------------------------------------------------------------------------------
+
+\begin{frame}
+	\frametitle{What is rotor routing?}
+	
+  	 \begin{defn}[Rotor]
+    		An arrow pointing from one vertex to another.\\
+    	\end{defn}
+	
+    	\begin{center}
+    		\begin{tikzpicture}
+    			\def \n {2}
+    			\def \radius {3cm}
+    			\def \margin {8}
+			\foreach \s in {1,...,\n} {
+        				\node[draw, circle] at ({360/\n * (\s - 1)}:\radius) {$\s$};
+     				 \draw [->] (-2.5,0) -- (2.5,0);
+			}
+    		\end{tikzpicture}
+	\end{center}
+	
+	\pause 
+	
+	\begin{defn}[Rotor Configuration]
+		An assignment of a single rotor to every vertex on a graph.
+	\end{defn}
+	
+\end{frame}
+
+%---------------------------------------------------------------------------------
+%------------------CONFIGURATION DEFINITION---------------------
+%---------------------------------------------------------------------------------
+
+\begin{frame}
+	\frametitle{What is rotor routing?}
+	
+	\begin{defn}[Rotor Configuration]
+		An assignment of a single rotor to every vertex on a graph.
+	\end{defn}
+	
+%\end{frame}
+
+%---------------------------------------------------------------------------------
+%---------------------MECHANISM DEFINITION------------------------
+%---------------------------------------------------------------------------------
+
+%\begin{frame}
+%	\frametitle{What is rotor routing?}
+\pause	
+
+	\begin{defn}[Rotor Mechanism]
+    		Given a set of possible rotors $\mathcal{E}$ starting at a given point, a rotor mechanism is a cyclic permutation of $\mathcal{E}$.
+	\end{defn}
+	
+%\end{frame}
+
+%---------------------------------------------------------------------------------
+%---------------------ROTOR WALK DEFINITION----------------------
+%---------------------------------------------------------------------------------
+\pause
+%\begin{frame}
+	\frametitle{What is rotor routing?}
+	
+	\begin{defn}[Rotor Walk]
+		A traversal of a particle along a initial rotor configuration. The particle follows the direction of rotors, which then change direction according to the rotor mechanism.
+    	\end{defn}
+
+\end{frame}
+
+%---------------------------------------------------------------------------------
+%-------------------------------EXAMPLE 1---------------------------------
+%---------------------------------------------------------------------------------
+
+\begin{frame}
+	\frametitle{Rotor walk example}
+	
+	\begin{figure}
+		\begin{tikzpicture}
+			\def \n {3}
+			\def \radius {3cm}
+			\def \margin {8}
+			\foreach \s in {1,2} {
+				\node[draw, circle] at ({360/\n * (\s - 1)}:\radius) {$\s$};
+				\draw[->, >=latex] ({360/\n * (\s - 1)+\margin}:\radius)
+				 	arc ({360/\n * (\s - 1)+\margin}:{360/\n * (\s)-\margin}:\radius);
+			}
+			\foreach \s in {3} {
+				\node[draw, circle, fill=black] at ({360/\n * (\s - 1)}:\radius) {\color{white} $\s$};
+				\draw[->, >=latex] ({360/\n * (\s - 1)+\margin}:\radius)
+				 	arc ({360/\n * (\s - 1)+\margin}:{360/\n * (\s)-\margin}:\radius);
+			}
+		\end{tikzpicture}
+	\end{figure}
+	
+\end{frame}
+
+%---------------------------------------------------------------------------------
+%-------------------------------EXAMPLE 2---------------------------------
+%---------------------------------------------------------------------------------
+
+\begin{frame}
+	\frametitle{Rotor walk example}
+	
+	\begin{figure}
+		\begin{tikzpicture}
+			\def \n {3}
+			\def \radius {3cm}
+			\def \margin {8}
+			\foreach \s in {1} {
+				\node[draw, circle, fill=black] at ({360/\n * (\s - 1)}:\radius) {\color{white} $\s$};
+				\draw[->, >=latex] ({360/\n * (\s - 1)+\margin}:\radius)
+				 	arc ({360/\n * (\s - 1)+\margin}:{360/\n * (\s)-\margin}:\radius);
+			}
+			\foreach \s in {2} {
+				\node[draw, circle] at ({360/\n * (\s - 1)}:\radius) {$\s$};
+				\draw[<->, >=latex] ({360/\n * (\s - 1)+\margin}:\radius)
+				 	arc ({360/\n * (\s - 1)+\margin}:{360/\n * (\s)-\margin}:\radius);
+			}
+			\foreach \s in {3} {
+				\node[draw, circle] at ({360/\n * (\s - 1)}:\radius) {$\s$};
+			}
+		\end{tikzpicture}
+	\end{figure}
+	
+\end{frame}
+
+%---------------------------------------------------------------------------------
+%-------------------------------EXAMPLE 3---------------------------------
+%---------------------------------------------------------------------------------
+
+\begin{frame}
+	\frametitle{Rotor walk example}
+	
+	\begin{figure}
+		\begin{tikzpicture}
+			\def \n {3}
+			\def \radius {3cm}
+			\def \margin {8}
+			\foreach \s in {1} {
+				\node[draw, circle] at ({360/\n * (\s - 1)}:\radius) {$\s$};
+			}
+			\foreach \s in {2} {
+				\node[draw, circle, fill=black] at ({360/\n * (\s - 1)}:\radius) {\color{white} $\s$};
+				\draw[<->, >=latex] ({360/\n * (\s - 1)+\margin}:\radius)
+				 	arc ({360/\n * (\s - 1)+\margin}:{360/\n * (\s)-\margin}:\radius);
+			}
+			\foreach \s in {3} {
+				\node[draw, circle] at ({360/\n * (\s - 1)}:\radius) {$\s$};
+				\draw[<-, >=latex] ({360/\n * (\s - 1)+\margin}:\radius)
+				 	arc ({360/\n * (\s - 1)+\margin}:{360/\n * (\s)-\margin}:\radius);
+			}
+		\end{tikzpicture}
+	\end{figure}
+	
+\end{frame}
+
+%---------------------------------------------------------------------------------
+%-------------------------------EXAMPLE 4---------------------------------
+%---------------------------------------------------------------------------------
+
+\begin{frame}
+	\frametitle{Rotor walk example}
+	
+	\begin{figure}
+		\begin{tikzpicture}
+			\def \n {3}
+			\def \radius {3cm}
+			\def \margin {8}
+			\foreach \s in {1,2} {
+				\node[draw, circle] at ({360/\n * (\s - 1)}:\radius) {$\s$};
+				\draw[<-, >=latex] ({360/\n * (\s - 1)+\margin}:\radius)
+				 	arc ({360/\n * (\s - 1)+\margin}:{360/\n * (\s)-\margin}:\radius);
+			}
+			\foreach \s in {3} {
+				\node[draw, circle, fill=black] at ({360/\n * (\s - 1)}:\radius) {\color{white} $\s$};
+				\draw[<-, >=latex] ({360/\n * (\s - 1)+\margin}:\radius)
+				 	arc ({360/\n * (\s - 1)+\margin}:{360/\n * (\s)-\margin}:\radius);
+			}
+		\end{tikzpicture}
+	\end{figure}
+	
+\end{frame}
+
+%---------------------------------------------------------------------------------
+%-------------------------------EXAMPLE 5---------------------------------
+%---------------------------------------------------------------------------------
+
+\begin{frame}
+	\frametitle{Rotor walk example}
+	
+	\begin{figure}
+		\begin{tikzpicture}
+			\def \n {3}
+			\def \radius {3cm}
+			\def \margin {8}
+			\foreach \s in {1} {
+				\node[draw, circle] at ({360/\n * (\s - 1)}:\radius) {$\s$};
+				\draw[<-, >=latex] ({360/\n * (\s - 1)+\margin}:\radius)
+				 	arc ({360/\n * (\s - 1)+\margin}:{360/\n * (\s)-\margin}:\radius);
+			}
+			\foreach \s in {2} {
+				\node[draw, circle, fill=black] at ({360/\n * (\s - 1)}:\radius) {\color{white} $\s$};
+			}
+			\foreach \s in {3} {
+				\node[draw, circle] at ({360/\n * (\s - 1)}:\radius) {$\s$};
+				\draw[<->, >=latex] ({360/\n * (\s - 1)+\margin}:\radius)
+				 	arc ({360/\n * (\s - 1)+\margin}:{360/\n * (\s)-\margin}:\radius);
+			}
+		\end{tikzpicture}
+	\end{figure}
+	
+\end{frame}
+
+%---------------------------------------------------------------------------------
+%-------------------------------EXAMPLE 6---------------------------------
+%---------------------------------------------------------------------------------
+
+\begin{frame}
+	\frametitle{Rotor walk example}
+	
+	\begin{figure}
+		\begin{tikzpicture}
+			\def \n {3}
+			\def \radius {3cm}
+			\def \margin {8}
+			\foreach \s in {1} {
+				\node[draw, circle, fill=black] at ({360/\n * (\s - 1)}:\radius) {\color{white} $\s$};
+			}
+			\foreach \s in {2} {
+				\node[draw, circle] at ({360/\n * (\s - 1)}:\radius) {$\s$};
+				\draw[->, >=latex] ({360/\n * (\s - 1)+\margin}:\radius)
+				 	arc ({360/\n * (\s - 1)+\margin}:{360/\n * (\s)-\margin}:\radius);
+			}
+			\foreach \s in {3} {
+				\node[draw, circle] at ({360/\n * (\s - 1)}:\radius) {$\s$};
+				\draw[<->, >=latex] ({360/\n * (\s - 1)+\margin}:\radius)
+				 	arc ({360/\n * (\s - 1)+\margin}:{360/\n * (\s)-\margin}:\radius);
+			}
+		\end{tikzpicture}
+	\end{figure}
+	
+\end{frame}
+
+%---------------------------------------------------------------------------------
+%-------------------------------EXAMPLE 7---------------------------------
+%---------------------------------------------------------------------------------
+
+\begin{frame}
+	\frametitle{Rotor walk example}
+	
+	\begin{figure}
+		\begin{tikzpicture}
+			\def \n {3}
+			\def \radius {3cm}
+			\def \margin {8}
+			\foreach \s in {1,2} {
+				\node[draw, circle] at ({360/\n * (\s - 1)}:\radius) {$\s$};
+				\draw[->, >=latex] ({360/\n * (\s - 1)+\margin}:\radius)
+				 	arc ({360/\n * (\s - 1)+\margin}:{360/\n * (\s)-\margin}:\radius);
+			}
+			\foreach \s in {3} {
+				\node[draw, circle, fill=black] at ({360/\n * (\s - 1)}:\radius) {\color{white} $\s$};
+				\draw[->, >=latex] ({360/\n * (\s - 1)+\margin}:\radius)
+				 	arc ({360/\n * (\s - 1)+\margin}:{360/\n * (\s)-\margin}:\radius);
+			}
+		\end{tikzpicture}
+	\end{figure}
+	
+\end{frame}
+
+%---------------------------------------------------------------------------------
+%--------------------------------BLANK Z2-----------------------------------
+%---------------------------------------------------------------------------------
+
+%\begin{frame}
+%	\frametitle{Rotor routing on $\mathbb{Z}^2$}
+	
+%\end{frame}
+
+%---------------------------------------------------------------------------------
+%----------------------------ROTORS ON Z2-------------------------------
+%---------------------------------------------------------------------------------
+ 
+ \begin{frame}
+ 	\frametitle{Rotor routing on $\mathbb{Z}^2$}
+	
+	\pause
+	
+	\begin{defn}[Rotor mechanism on $\mathbb{Z}^2$]
+		There are four possible rotors starting at a given point: $$\mathcal{E} = \{\text{North}, \text{East}, \text{South}, \text{West} \}.$$ Rotors turn counter-clockwise, repeatedly cycling through $\mathcal{E}$.
+	\end{defn}
+ \pause
+ \includegraphics[width=\textwidth]{Arrows}
+
+ \end{frame}
+ 
+%---------------------------------------------------------------------------------
+%----------------------------SMALL Z2 DEMO-----------------------------
+%---------------------------------------------------------------------------------
+ 
+ % \begin{frame}
+ %	\frametitle{Rotor routing on $\mathbb{Z}^2$}
+	
+%	\begin{center}
+%		\includegraphics[width=\textwidth]{Arrows}
+%	\end{center}
+ 
+ %\end{frame}
+ 
+%---------------------------------------------------------------------------------
+%------------------------BLANK RECURRENCE-------------------------
+%---------------------------------------------------------------------------------
+
+%\begin{frame}
+%	\frametitle{Recurrence and transience}
+	
+%\end{frame}
+
+%---------------------------------------------------------------------------------
+%--------------------RECURRENCE DEFINITION----------------------
+%---------------------------------------------------------------------------------
+
+\begin{frame}
+	\frametitle{Recurrence and transience}
+	\pause
+	\begin{defn}[Recurrence]
+		A walk is recurrent if it visits each point \underline{infinitely} many times.
+	\end{defn}
+	
+	\pause 
+	
+	\begin{itemize}
+		\item Random walk on $\mathbb{Z}$, $\mathbb{Z}^2$
+		\item Repeated rotor walks on $\mathbb{Z}$, $\mathbb{Z}^2$ with single-direction configuration
+	\end{itemize}
+	
+	\pause	  
+	
+	\begin{defn}[Transience]
+		A walk is transient if it visits each point \underline{finitely} many times.
+	\end{defn}
+	
+	\pause
+	
+	\begin{itemize}
+		\item Random walk on $\mathbb{Z}^d$ where $d \ge 3$
+		\item Repeated rotor walks on $\mathbb{Z}^3$ with single-direction configuration
+	\end{itemize}
+	  
+%\end{frame}
+
+%---------------------------------------------------------------------------------
+%---------------------------BLANK EXAMPLES---------------------------
+%---------------------------------------------------------------------------------
+
+%\begin{frame}
+%	\frametitle{Examples of recurrence and transience}
+	
+%\end{frame}
+
+%---------------------------------------------------------------------------------
+%---------------------RECURRENCE EXAMPLES----------------------
+%---------------------------------------------------------------------------------
+
+%\begin{frame}
+%	\frametitle{Examples of recurrence and transience}
+\end{frame}
+
+%---------------------------------------------------------------------------------
+%---------------------------BLANK THEOREMS---------------------------
+%---------------------------------------------------------------------------------
+
+\begin{frame}
+	\frametitle{Theorems about recurrence and transience}
+	
+\end{frame}
+
+%---------------------------------------------------------------------------------
+%----------------------RECURRENCE THEOREM----------------------
+%---------------------------------------------------------------------------------
+
+\begin{frame}
+	\frametitle{Theorems about recurrence and transience}
+	
+	\begin{theorem}[Angel-Holroyd 2011]
+		Given a rotor mechanism and a configuration, a single rotor walk is either recurrent for every starting vertex, or transient for every starting vertex.
+	\end{theorem}
+	
+%\end{frame}
+
+%---------------------------------------------------------------------------------
+%---------------------RECURRENCE COROLLARY--------------------
+%---------------------------------------------------------------------------------
+\pause
+%\begin{frame}
+	\frametitle{Theorems about recurrence and transience}
+	
+	\begin{cor}
+		Given a rotor mechanism, two rotor configurations differing at only finitely many vertices are either both recurrent or both transient.
+	\end{cor}
+	
+\end{frame}
+
+%---------------------------------------------------------------------------------
+%--------------------------COROLLARY PROOF-------------------------
+%---------------------------------------------------------------------------------
+
+\begin{frame}
+	\frametitle{Theorems about recurrence and transience}
+	
+	\begin{cor}
+		Given a rotor mechanism, two rotor configurations differing at only finitely many vertices are either both recurrent or both transient.
+	\end{cor}
+	
+	\begin{proof}
+		We need only consider two rotor configurations $r, r'$ differing at only one vertex $v$, such that a single rotation of the rotor at $v$ produces $r'$ from $r$. If $r$ is recurrent, a rotor walk started at $v$ produces $r'$ with the particle moved to some other vertex. By the aforementioned theorem, $r'$ must also be recurrent.
+	\end{proof}
+	
+\end{frame}
+
+%---------------------------------------------------------------------------------
+%-------------------------BLANK CONJECTURES-----------------------
+%---------------------------------------------------------------------------------
+
+\begin{frame}
+	\frametitle{Random configuration on $\mathbb{Z}^2$}
+
+\end{frame}
+
+%---------------------------------------------------------------------------------
+%--------------------RANDOMNESS CONJECTURE------------------
+%---------------------------------------------------------------------------------
+
+\begin{frame}
+	\frametitle{Random configuration on $\mathbb{Z}^2$}
+	
+	\begin{conj}[Levine-Peres 2015]
+		Given a random configuration of rotors on $\mathbb{Z}^2$, a rotor walk on that configuration is recurrent with probability $1$.
+	\end{conj}
+	
+\end{frame}
+
+%---------------------------------------------------------------------------------
+%-------------------------HITTING FREQUENCY------------------------
+%---------------------------------------------------------------------------------
+
+\begin{frame}
+	\frametitle{Random configuration on $\mathbb{Z}^2$}
+	
+	\includegraphics[width=\textwidth]{Hitting}
+	
+\end{frame}
+
+%---------------------------------------------------------------------------------
+%------------------------2-MANIFOLD EXAMPLES----------------------
+%---------------------------------------------------------------------------------
+
+\begin{frame}
+	\frametitle{Rotor routing on other 2-manifolds}
+	
+	\pause
+	
+	\begin{defn}[2-manifold]
+		A topological space whose points all have open disks as neighborhoods.
+	\end{defn}
+	
+	\pause
+	
+	\hspace{2cm}
+	
+	Some 2-manifolds:
+	\begin{multicols}{2}
+		\begin{itemize}
+			\item Cylinder
+			\item M{\"o}bius strip
+			\item Torus
+			\item Sphere
+			\item Klein bottle
+			\item Real projective plane
+		\end{itemize}
+	\end{multicols}
+
+\end{frame}
+
+%---------------------------------------------------------------------------------
+%----------------------COMPACTNESS DEFINITION------------------
+%---------------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{Rotor routing on other 2-manifolds}
+	
+	\begin{defn}[Compactness]
+		If a space is compact, every open cover has a finite sub-cover.
+	\end{defn}
+	
+	\pause
+	
+	\begin{multicols}{2}
+		Non-compact 2-manifolds:
+		\begin{itemize}
+			\item Plane
+			\item Cylinder
+			\item M{\"o}bius strip
+		\end{itemize}
+		
+		\pause
+	
+		\hspace{2cm}
+	
+		Compact 2-manifolds:
+		\begin{itemize}
+			\item Torus
+			\item Sphere
+			\item Klein bottle
+			\item Real projective plane
+		\end{itemize}
+	\end{multicols}
+	
+\end{frame}
+
+%---------------------------------------------------------------------------------
+%-------------------------------GLUING DIAGRAM-----------------------
+%---------------------------------------------------------------------------------
+
+\begin{frame}
+	\frametitle{Rotor routing on other 2-manifolds}
+	
+	A gluing diagram shows how edges of a polygon are connected to create a surface. When a particle hits an edge that is associated to another, the particle "reappears" on the associated edge.
+	\vspace{-0.5cm}
+	\begin{center}
+		\includegraphics[height=200px]{Glue}
+	\end{center}
+
+\end{frame}
+
+%---------------------------------------------------------------------------------
+%--------------------------BLANK CONJECTURES----------------------
+%---------------------------------------------------------------------------------
+
+\begin{frame}
+	\frametitle{Experimental results}
+	
+\end{frame}
+
+%---------------------------------------------------------------------------------
+%---------------------------PLAIN CONJECTURE------------------------
+%---------------------------------------------------------------------------------
+
+\begin{frame}
+	\frametitle{Experimental results}
+	
+	\begin{conj}
+		Repeated rotor walks on the M{\"o}bius strip, cylinder, and plane will eventually create congruent octagonal patterns for the single-direction configuration.
+	\end{conj}
+	
+%\end{frame}
+
+%---------------------------------------------------------------------------------
+%-------------------------OCTAGON CONJECTURES------------------
+%---------------------------------------------------------------------------------
+
+%\begin{frame}
+%	\frametitle{Experimental results}
+	
+%	\begin{conj}
+%		Every non-compact 2-manifold will eventually create a congruent octagonal pattern.
+%	\end{conj}
+\pause	
+	\hspace{0.8cm}
+	
+	\includegraphics[width=\textwidth]{Octagon}
+
+\end{frame}
+
+%---------------------------------------------------------------------------------
+%-----------------------COMPACT LOOP THEOREM------------------
+%---------------------------------------------------------------------------------
+
+\begin{frame}
+	\frametitle{Experimental results}
+	
+	\begin{observe}
+		For any rotor configuration and rotor mechanism, a rotor walk on a compact surface eventually results in a finite loop of configurations.
+	\end{observe}
+
+\end{frame}
+
+%---------------------------------------------------------------------------------
+%-------------------------------FUTURE WORK----------------------------
+%---------------------------------------------------------------------------------
+
+\begin{frame}
+	\frametitle{Future work}
+	
+	\begin{itemize}
+		\item Testing alternate configurations, including different lattices and transient configurations.
+		\item Experimenting with rotor routing in higher dimensions.
+		\item Developing a predictive model for surface type based on loop length on compact surfaces.
+	\end{itemize}
+
+\end{frame}
+ 
+\end{document}

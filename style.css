@@ -1,0 +1,87 @@
+html {
+    font-family: "Lucida Grande", Arial, sans-serif;
+}
+body {
+    height: 95%;
+    float: left;
+    /* We use a table view to ensure the left navbar reaches to the bottom
+       of the website. See the display modifier in #navbar and #content. */
+    display: table;
+    margin-left: 25%;
+}
+#header {
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 0.5%;
+}
+#navbar {
+    line-height: 250%;
+    background-color: #f1f1f1;
+    /* There are some issues with navbar height. With no height modifier, the
+       navbar cuts off before the footer. With the height modifier, the content
+       block is sometimes unnecessarily long. */
+    height: 95%;
+    width: 15%;
+    float: left;
+    padding: 2%;
+    display: table-cell;
+    vertical-align: top;
+}
+#navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background-color: #f1f1f1;
+}
+#navbar li a {
+    display: block;
+    color: #000000;
+    padding-left: 5%;
+    text-decoration: none;
+}
+/* Highlights navigation bar items when the user hovers over them. */
+#navbar li a:hover {
+    background-color: #555;
+    color: white;
+}
+#content {
+    float: left;
+    padding-left: 1%;
+    height: 95%;
+    width: 75%;
+    display: table-cell;
+    vertical-align: top;
+}
+#interactive {
+  display: flex;
+  flex: 1;
+}
+#visual {
+  border: 1px solid #000000;
+  width: 500px;
+}
+#form {
+  width: 30%;
+  font-size: 12px;
+  padding-left: 10px;
+}
+#footer {
+    background-color: black;
+    color: white;
+    clear: both;
+    text-align: center;
+    padding: 0.5%;
+}
+
+sup, sub {
+   vertical-align: baseline;
+   position: relative;
+   top: -0.4em;
+}
+sub { top: 0.4em; }
+
+#references ul li {
+margin-left:-20px;
+}
