@@ -1,4 +1,4 @@
-# Rotor-Routing-Presentation
+# SUMS 2016: Rotor Routing on 2-manifolds
 
 To run any of the visualizations in this repository, simply click "Download ZIP" and open the correct '.html' file with a web browser. Note each HTML file has a dependency on 'style.css' and the '.js' file in the same directory.
 
